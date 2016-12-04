@@ -101,3 +101,6 @@ if [ "$board_id" = "S88537AC1" ]; then
     setprop ro.boot.fpsensor none
     setprop persist.sys.fp.vendor none
 fi
+
+# Set shared touchpanel nodes ownership (these are proc_symlinks to the real sysfs nodes)
+chown -LR system.system /proc/touchpanel

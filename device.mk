@@ -251,6 +251,7 @@ PRODUCT_PACKAGES += \
     fstab.qcom \
     init.qcom.rc \
     init.qcom.sh \
+    init.qcom.post_boot.sh \
     init.recovery.qcom.rc \
     ueventd.qcom.rc
 

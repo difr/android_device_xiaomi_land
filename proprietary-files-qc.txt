@@ -90,6 +90,12 @@ vendor/lib64/libbtnv.so
 vendor/lib64/libbt-hidlclient.so
 vendor/lib64/libbthost_if.so
 
+# Bluetooth (aptX) - from marlin - OPM1.171019.011
+lib/libaptX_encoder.so
+lib/libaptXHD_encoder.so
+lib64/libaptX_encoder.so
+lib64/libaptXHD_encoder.so
+
 # CNE - from TA-TA-1025 (Nokia 6)
 etc/cne/andsfCne.xml
 etc/cne/SwimConfig.xml

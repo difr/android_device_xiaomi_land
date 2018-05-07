@@ -16,9 +16,11 @@
 # Vibrator
 /sys/devices/virtual/timed_output/vibrator(/.*)?	u:object_r:sysfs_vibrator:s0
 
-# IR Blaster
-/sys/class/leds/infrared/transmit	u:object_r:sysfs_ir:s0
-/sys/class/leds/infrared/brightness	u:object_r:sysfs_ir:s0
+# Lights / IR Blaster
+/sys/devices/soc/[a-z0-9]+\.sdhci/leds(/.*)?	u:object_r:sysfs_leds:s0
+/sys/devices/soc/[a-z0-9]+\.i2c/i2c-[0-9]+/[0-9]+-[a-z0-9]+/leds(/.*)?	u:object_r:sysfs_leds:s0
+/sys/devices/soc/leds-qpnp-[0-9]+/leds(/.*)?	u:object_r:sysfs_leds:s0
+/sys/devices/soc/soc:gpio-leds/leds(/.*)?	u:object_r:sysfs_leds:s0
 
 # HIDL
 /(vendor|system/vendor)/bin/hw/android\.hardware\.vibrator@1\.1-service\.land	u:object_r:hal_vibrator_default_exec:s0

@@ -335,6 +335,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.power@1.0-service.land
 
+# Spectrum
+PRODUCT_PACKAGES += \
+    Spectrum
+
 # RCS
 PRODUCT_PACKAGES += \
     rcs_service_aidl \

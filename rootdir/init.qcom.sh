@@ -32,7 +32,7 @@
 
 
 echo 1 > /proc/sys/net/ipv6/conf/default/accept_ra_defrtr
-start vendor.msm_irqbalance
+#start vendor.msm_irqbalance
 #setprop qemu.hw.mainkeys 0
 
 

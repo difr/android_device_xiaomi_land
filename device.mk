@@ -171,8 +171,8 @@ PRODUCT_PACKAGES += \
     android.hardware.renderscript@1.0-impl
 
 # Display calibration
-PRODUCT_PACKAGES += \
-    vendor.lineage.livedisplay@1.0-service-sdm
+#PRODUCT_PACKAGES += \
+#    vendor.lineage.livedisplay@1.0-service-sdm
 
 # DRM
 PRODUCT_PACKAGES += \

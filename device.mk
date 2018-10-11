@@ -174,6 +174,10 @@ PRODUCT_PACKAGES += \
 #PRODUCT_PACKAGES += \
 #    vendor.lineage.livedisplay@1.0-service-sdm
 
+# XiaomiParts
+PRODUCT_PACKAGES += \
+    XiaomiParts
+ 
 # DRM
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \

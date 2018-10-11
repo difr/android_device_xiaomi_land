@@ -1,1 +1,7 @@
 get_prop(system_app, qemu_hw_mainkeys_prop)
+allow system_app sysfs_android_touch:file rw_file_perms;
+allow system_app sysfs_android_touch:dir search;
+allow system_app sysfs_vibrator:file rw_file_perms;
+allow system_app sysfs_vibrator:dir search;
+allow system_app sysfs_torch:file rw_file_perms;
+allow system_app sysfs_torch:dir search;

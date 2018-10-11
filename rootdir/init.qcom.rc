@@ -444,6 +444,16 @@ on boot
     chown system system /sys/devices/soc/soc:fpc1020/spi_prepare
     chmod 0660 /sys/devices/soc/soc:fpc1020/spi_prepare
 
+    # Wake gestures
+    chown root system /sys/android_touch/doubletap2wake
+    chmod 0664 /sys/android_touch/doubletap2wake
+    chown root system /sys/android_touch/sweep2wake
+    chmod 0664 /sys/android_touch/sweep2wake
+
+    # Flashlight
+    chown root system /sys/devices/soc/qpnp-flash-led-23/leds/led:torch_0/max_brightness
+    chmod 0664 /sys/devices/soc/qpnp-flash-led-23/leds/led:torch_0/max_brightness
+
     chown root system /sys/class/leds/red/blink
     chown root system /sys/class/leds/green/blink
     chown root system /sys/class/leds/blue/blink

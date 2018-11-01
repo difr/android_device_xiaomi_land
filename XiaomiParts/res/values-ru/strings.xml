@@ -14,14 +14,13 @@
      limitations under the License.
 -->
 <resources>
-    <string name="app_name">Xiaomi</string>
     <string name="advanced_settings">Дополнительные настройки</string>
+    <string name="wake_category">Пробуждение</string>
     <string name="dtap2wake_title">Пробуждение по двойному тапу</string>
     <string name="dtap2wake_summary">Ожидать двойной тап для пробуждения устройства</string>
     <string name="sweep2wake_title">Пробуждение по свайпу</string>
-    <string name="sweep2wake_summary">Ожидать свайп для пробуждения устройства</string>
+    <string name="sweep2wake_summary">Ожидать свайп (слева направо) для пробуждения устройства</string>
+    <string name="misc_category">Разное</string>
     <string name="vib_strength_title">Сила вибрации</string>
-    <string name="vib_strength_summary">Изменить силу вибрации</string>
     <string name="tor_brightness_title">Яркость фонарика</string>
-    <string name="tor_brightness_summary">Изменить яркость фонарика</string>
 </resources>

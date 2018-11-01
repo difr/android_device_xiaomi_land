@@ -14,14 +14,13 @@
      limitations under the License.
 -->
 <resources>
-    <string name="app_name">Xiaomi</string>
     <string name="advanced_settings">Additional settings</string>
+    <string name="wake_category">Wakening</string>
     <string name="dtap2wake_title">Double tap to wake</string>
     <string name="dtap2wake_summary">Wait for double tap to wake device</string>
     <string name="sweep2wake_title">Sweep to wake</string>
-    <string name="sweep2wake_summary">Wait for sweep to wake device</string>
+    <string name="sweep2wake_summary">Wait for sweep (from left to right) to wake device</string>
+    <string name="misc_category">Miscellaneous</string>
     <string name="vib_strength_title">Vibration strength</string>
-    <string name="vib_strength_summary">Change the strength of vibration</string>
     <string name="tor_brightness_title">Torch brightness</string>
-    <string name="tor_brightness_summary">Change the brightness of torch</string>
 </resources>

@@ -25,27 +25,30 @@ import android.support.v7.preference.PreferenceManager;
 
 public class SweepToWakeSwitch implements OnPreferenceChangeListener {
 
+    private static final String KEY = DeviceSettings.KEY_SWEEP2WAKE;
     private static final String FILE = "/sys/android_touch/sweep2wake";
 
-    public static String getFile() {
-        if (Utils.fileWritable(FILE)) {
-            return FILE;
-        }
-        return null;
+    public static boolean isSupported(Context context) {
+        return Utils.fileWritable(FILE);
     }
 
-    public static boolean isSupported() {
-        return Utils.fileWritable(getFile());
+    public static void restore(Context context) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if (sharedPrefs.contains(KEY))
+            writeValue(context, sharedPrefs.getBoolean(KEY, false));
     }
 
-    public static boolean isCurrentlyEnabled(Context context) {
-        return Utils.getFileValueAsBoolean(getFile(), false);
+    public static boolean readValue(Context context) {
+        return !Utils.readValue(FILE, "0").equals("0");
+    }
+
+    public static void writeValue(Context context, boolean newValue) {
+        Utils.writeValue(FILE, (newValue ? "1" : "0"));
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        Boolean enabled = (Boolean) newValue;
-        Utils.writeValue(getFile(), enabled ? "1" : "0");
+        writeValue(preference.getContext(), (Boolean) newValue);
         return true;
     }
 }

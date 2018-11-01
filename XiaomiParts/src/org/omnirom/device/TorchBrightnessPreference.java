@@ -17,86 +17,63 @@
 */
 package org.omnirom.device;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceManager;
-import android.support.v7.preference.PreferenceViewHolder;
-import android.database.ContentObserver;
 import android.util.AttributeSet;
-import android.view.View;
-import android.widget.SeekBar;
-import android.widget.Button;
-import android.os.Bundle;
-import android.util.Log;
-import android.os.Vibrator;
 
-public class TorchBrightnessPreference extends Preference implements
-        SeekBar.OnSeekBarChangeListener {
+public class TorchBrightnessPreference extends ProperSeekBarPreference {
 
-    private SeekBar mSeekBar;
-    private int mOldBrightness;
-    private static int mMinValue = 0;
-    private static int mMaxValue = 200;
-    private static int mDefValue = mMaxValue;
+    private static int mMinVal = 0;
+    private static int mMaxVal = 200;
+    private static int mDefVal = mMaxVal;
 
-    private static final String FILE_BRIGHTNESS = "/sys/devices/soc/qpnp-flash-led-23/leds/led:torch_0/max_brightness";
+    private static final String KEY = DeviceSettings.KEY_TORBRIGHTNESS;
+    private static final String FILE = "/sys/devices/soc/qpnp-flash-led-23/leds/led:torch_0/max_brightness";
 
     public TorchBrightnessPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        setLayoutResource(R.layout.preference_seek_bar);
+        mInterval = 10;
+        mShowSign = false;
+        mUnits = "";
+        mContinuousUpdates = false;
+        mMinValue = mMinVal;
+        mMaxValue = mMaxVal;
+        mDefaultValueExists = true;
+        mDefaultValue = mDefVal;
+        if (isSupported(context))
+            mValue = Integer.parseInt(readValue(context));
+        setPersistent(false);
     }
 
-    @Override
-    public void onBindViewHolder(PreferenceViewHolder holder) {
-        super.onBindViewHolder(holder);
-
-        mOldBrightness = Integer.parseInt(getValue(getContext()));
-        mSeekBar = (SeekBar) holder.findViewById(R.id.seekbar);
-        mSeekBar.setMax(mMaxValue - mMinValue);
-        mSeekBar.setProgress(mOldBrightness - mMinValue);
-        mSeekBar.setOnSeekBarChangeListener(this);
-    }
-
-    public static boolean isSupported() {
-        return Utils.fileWritable(FILE_BRIGHTNESS);
-    }
-
-    public static String getValue(Context context) {
-        return Utils.getFileValue(FILE_BRIGHTNESS, String.valueOf(mDefValue));
-    }
-
-    private void setValue(String newValue, boolean withFeedback) {
-        Utils.writeValue(FILE_BRIGHTNESS, newValue);
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
-        editor.putString(DeviceSettings.KEY_TORBRIGHTNESS, newValue);
-        editor.commit();
-        if (withFeedback) {
-            ;
-        }
+    public static boolean isSupported(Context context) {
+        return Utils.fileWritable(FILE);
     }
 
     public static void restore(Context context) {
-        if (!isSupported()) {
-            return;
-        }
-
-        String storedValue = PreferenceManager.getDefaultSharedPreferences(context).getString(DeviceSettings.KEY_TORBRIGHTNESS, String.valueOf(mDefValue)); 
-        Utils.writeValue(FILE_BRIGHTNESS, storedValue);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if (sharedPrefs.contains(KEY))
+            writeValue(context, sharedPrefs.getString(KEY, String.valueOf(mDefVal)));
     }
 
-    public void onProgressChanged(SeekBar seekBar, int progress,
-            boolean fromTouch) {
-        setValue(String.valueOf(progress + mMinValue), true);
+    public static String readValue(Context context) {
+        return Utils.readValue(FILE, String.valueOf(mDefVal));
     }
 
-    public void onStartTrackingTouch(SeekBar seekBar) {
-        // NA
+    public static void writeValue(Context context, String newValue) {
+        Utils.writeValue(FILE, newValue);
     }
 
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        // NA
+    public static void saveValue(Context context, String newValue) {
+        writeValue(context, newValue);
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putString(KEY, newValue);
+        editor.commit();
+    }
+
+    @Override
+    protected void changeValue(int newValue) {
+        saveValue(getContext(), String.valueOf(newValue));
     }
 }

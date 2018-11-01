@@ -19,11 +19,9 @@ package org.omnirom.device;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-//import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.preference.PreferenceViewHolder;
-import android.util.AttributeSet;
 import android.os.Vibrator;
+import android.support.v7.preference.PreferenceManager;
+import android.util.AttributeSet;
 
 public class VibratorStrengthPreference extends ProperSeekBarPreference {
 
@@ -33,9 +31,9 @@ public class VibratorStrengthPreference extends ProperSeekBarPreference {
     private static int mMinVal = 116;
     private static int mMaxVal = 3596;
     private static int mDefVal = mMaxVal - (mMaxVal - mMinVal) / 4;
-    private Vibrator mVibrator;
 
-    private static final String FILE_LEVEL = "/sys/class/timed_output/vibrator/vtg_level";
+    private static final String KEY = DeviceSettings.KEY_VIBSTRENGTH;
+    private static final String FILE = "/sys/class/timed_output/vibrator/vtg_level";
     private static final long testVibrationPattern[] = {0,250};
 
     public VibratorStrengthPreference(Context context, AttributeSet attrs) {
@@ -49,41 +47,39 @@ public class VibratorStrengthPreference extends ProperSeekBarPreference {
         mMaxValue = mMaxVal;
         mDefaultValueExists = true;
         mDefaultValue = mDefVal;
-        mValue = Integer.parseInt(loadValue());
-
+        if (isSupported(context))
+            mValue = Integer.parseInt(readValue(context));
         setPersistent(false);
-
-        mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
-    public static boolean isSupported() {
-        return Utils.fileWritable(FILE_LEVEL);
+    public static boolean isSupported(Context context) {
+        return Utils.fileWritable(FILE);
     }
 
     public static void restore(Context context) {
-        if (!isSupported()) {
-            return;
-        }
-
-        String storedValue = PreferenceManager.getDefaultSharedPreferences(context).getString(DeviceSettings.KEY_VIBSTRENGTH, String.valueOf(mDefVal));
-        Utils.writeValue(FILE_LEVEL, storedValue);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if (sharedPrefs.contains(KEY))
+            writeValue(context, sharedPrefs.getString(KEY, String.valueOf(mDefVal)));
     }
 
-    public static String loadValue() {
-        return Utils.getFileValue(FILE_LEVEL, String.valueOf(mDefVal));
+    public static String readValue(Context context) {
+        return Utils.readValue(FILE, String.valueOf(mDefVal));
     }
 
-    private void saveValue(String newValue) {
-        Utils.writeValue(FILE_LEVEL, newValue);
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
-        editor.putString(DeviceSettings.KEY_VIBSTRENGTH, newValue);
+    public static void writeValue(Context context, String newValue) {
+        Utils.writeValue(FILE, newValue);
+    }
+
+    public static void saveValue(Context context, String newValue) {
+        writeValue(context, newValue);
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putString(KEY, newValue);
         editor.commit();
-        mVibrator.vibrate(testVibrationPattern, -1);
     }
 
     @Override
     protected void changeValue(int newValue) {
-        saveValue(String.valueOf(newValue));
+        saveValue(getContext(), String.valueOf(newValue));
+        ((Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE)).vibrate(testVibrationPattern, -1);
     }
-
 }

@@ -17,25 +17,11 @@
 */
 package org.omnirom.device;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.res.Resources;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v14.preference.PreferenceFragment;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceCategory;
-import android.support.v7.preference.PreferenceScreen;
-import android.support.v7.preference.TwoStatePreference;
-import android.provider.Settings;
-import android.text.TextUtils;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.util.Log;
+import android.support.v7.preference.*;
 
 public class DeviceSettings extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener {
@@ -55,26 +41,28 @@ public class DeviceSettings extends PreferenceFragment implements
         setPreferencesFromResource(R.xml.main, rootKey);
 
         mDTapToWakeSwitch = (TwoStatePreference) findPreference(KEY_DTAP2WAKE);
-        mDTapToWakeSwitch.setEnabled(DTapToWakeSwitch.isSupported());
-        mDTapToWakeSwitch.setChecked(DTapToWakeSwitch.isCurrentlyEnabled(this.getContext()));
         mDTapToWakeSwitch.setOnPreferenceChangeListener(new DTapToWakeSwitch());
+        if (DTapToWakeSwitch.isSupported(this.getContext())) {
+            mDTapToWakeSwitch.setChecked(DTapToWakeSwitch.readValue(this.getContext()));
+        } else
+            mDTapToWakeSwitch.setEnabled(false);
 
         mSweepToWakeSwitch = (TwoStatePreference) findPreference(KEY_SWEEP2WAKE);
-        mSweepToWakeSwitch.setEnabled(SweepToWakeSwitch.isSupported());
-        mSweepToWakeSwitch.setChecked(SweepToWakeSwitch.isCurrentlyEnabled(this.getContext()));
         mSweepToWakeSwitch.setOnPreferenceChangeListener(new SweepToWakeSwitch());
+        if (SweepToWakeSwitch.isSupported(this.getContext())) {
+            mSweepToWakeSwitch.setChecked(SweepToWakeSwitch.readValue(this.getContext()));
+        } else
+            mSweepToWakeSwitch.setEnabled(false);
 
 
         mVibratorStrength = (VibratorStrengthPreference) findPreference(KEY_VIBSTRENGTH);
-        if (mVibratorStrength != null) {
-            mVibratorStrength.setEnabled(VibratorStrengthPreference.isSupported());
-        }
+        if (!VibratorStrengthPreference.isSupported(this.getContext()))
+            mVibratorStrength.setEnabled(false);
 
         mTorchBrightness = (TorchBrightnessPreference) findPreference(KEY_TORBRIGHTNESS);
-        if (mTorchBrightness != null) {
-            mTorchBrightness.setEnabled(TorchBrightnessPreference.isSupported());
-        }
-        
+        if (!TorchBrightnessPreference.isSupported(this.getContext()))
+            mTorchBrightness.setEnabled(false);
+
     }
 
     @Override
